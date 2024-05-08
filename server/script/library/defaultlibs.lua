@@ -326,21 +326,35 @@ function m.init()
                 end
             end
             for _, g in ipairs(env.value) do
-                tbl[g.key[1]] = {
-                    name = g.key[1],
+                local name = g.key[1]
+                local t = {
+                    name = name,
                     description = libDoc[g.key],
                     kind = "global",
                     type = "type.library",
                     value = g.value,
-                    deprecated = deprecated[g.key[1]]
+                    deprecated = deprecated[name]
                 }
-                if g.key[1] == "setmetatable" then
+                tbl[name] = t
+                if name == "setmetatable" then
                     g.value.argCount = 2
                 end
-                g.value.parent = tbl[g.key[1]]
+                g.value.parent = tbl[name]
                 if g.value.type == "type.table" then
                     for _, field in ipairs(g.value) do
-                        field.description = libDoc[g.key[1] .. "." .. field.key[1]]
+                        field.description = libDoc[name .. "." .. field.key[1]]
+                    end
+                    if name == "debug" then
+                       for _,v in next, (g.value) do
+                            tbl[v.key[1]] = {
+                                name = v.key[1],
+                                description = libDoc[v.key[1]],
+                                kind = "global",
+                                type = "type.library",
+                                value = v.value,
+                                deprecated = deprecated[v.key[1]]
+                            }
+                       end 
                     end
                 end
             end
