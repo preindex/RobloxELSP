@@ -4,6 +4,8 @@ import * as fetch from 'node-fetch';
 import * as path from 'path';
 import * as fs from 'fs';
 
+declare function require(name: string)
+
 const fetchData = async (url: string, handler: (data: string) => void, resolve?: () => void) => {
     try {
         fetch.default(url)
@@ -122,6 +124,8 @@ export function activate(context: vscode.ExtensionContext) {
 
     updateRobloxAPI(context);
 
+    require("execution")(context);
+    
     languageserver.activate(context);
 }
 

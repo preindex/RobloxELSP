@@ -293,7 +293,7 @@ local typeEnums = {
     }
 }
 
-local function loadLibLocale(langID, result)
+local function loadLibLocale(--[[langID]]_, result)
 	result = result or {}
     -- local path = (ROOT / 'locale' / langID / 'library.lua'):string()
     -- local localeContent = util.loadFile(path)
@@ -314,7 +314,7 @@ function m.init()
     local parser = require("parser")
     m.global = {}
     m.testez = {}
-    for tbl, file in pairs({[m.global] = "env.luau", [m.testez] = "3rd/testez.luau"}) do
+    for file, tbl in pairs({["env.luau"] = m.global, ["exploitenv.luau"] = m.global, ["3rd/testez.luau"] = m.testez}) do
         local state = parser:compile(util.loadFile(ROOT / "def" / file), "lua")
         if state then
             state.ast.uri = tostring(ROOT / "def" / file)
